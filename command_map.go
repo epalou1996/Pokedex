@@ -2,6 +2,20 @@ package main
 
 import "fmt"
 
+// LocationResponse estructura para deserializar la respuesta JSON
+type LocationResponse struct {
+	Count    int             `json:"count"`
+	Next     *string         `json:"next"`
+	Previous *string         `json:"previous"`
+	Results  []LocationEntry `json:"results"`
+}
+
+// LocationEntry estructura para representar cada entrada en Results
+type LocationEntry struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
 // Esta sera la funcion que nos ayude a mapear correctamente hacia adelante.
 
 func commandMap(c *config) error {
