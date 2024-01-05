@@ -5,11 +5,10 @@ import (
 	"strings"
 )
 
-func StartRepl() {
-
+func StartRepl(c *config) {
+	fmt.Println("Hola soy Rotom, talvez me conozcas con otra forma, pero ahora puedo darte mucha informacion del mundo de Pokemon, en que puedo ayudarte?")
 	for {
 		var mensaje string
-		fmt.Println("Hola Bienvenido a la Pokedex, en que puedo ayudarte?")
 		fmt.Print(" Pokedex > ")
 		fmt.Scanln(&mensaje)
 		words := cleanInputs(mensaje)
@@ -17,7 +16,7 @@ func StartRepl() {
 
 		command, exists := getCommands()[comando]
 		if exists {
-			err := command.callback()
+			err := command.callback(c)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -35,19 +34,29 @@ func cleanInputs(text string) []string {
 	return words
 }
 
+type config struct {
+	Location MapsURLs
+}
+type MapsURLs struct {
+	Next     *string
+	Previous *string
+}
+
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand {
 	// Establecemos los comandos en un mapa como fue sugerido. sera un mapa de "comando" -> struct(comando)
 	// La funcion callback se establece sin parentesis para luego establecerse mas tarde
-	commandMap := make(map[string]cliCommand)
-	commandMap["help"] = cliCommand{"help", "Pronto podre ayudarte!", commandHelp}
-	commandMap["exit"] = cliCommand{"exit", "Hasta luego!", commandExit}
+	commandsMap := make(map[string]cliCommand)
+	commandsMap["help"] = cliCommand{"help", "Pronto podre ayudarte!", commandHelp}
+	commandsMap["exit"] = cliCommand{"exit", "Hasta luego!", commandExit}
+	commandsMap["map"] = cliCommand{"map", "Para ver los siguientes 20 lugares que se encuentran en este mundo.", commandMap}
+	commandsMap["mapb"] = cliCommand{"map", "Para ver los anteriores 20 lugares que se encuentran en este mundo.", commandMapb}
 
-	return commandMap
+	return commandsMap
 
 }
