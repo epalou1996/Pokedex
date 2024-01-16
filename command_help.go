@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // Es una funcion simple que nos permite mostrar todos los comandos que hay en nuestra pokedex
-func commandHelp(c *config) error {
+func commandHelp(c *config, args ...string) error {
 	fmt.Println("Uso:")
 	fmt.Println()
 	commands := getCommands()

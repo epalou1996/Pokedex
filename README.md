@@ -9,3 +9,6 @@ Los objetivos establecidos por boot.dev para este proyecto son los siguientes:
    * Learn how to build a CLI tool that makes interacting with a back-end server easier
    * Get hands-on practice with local Go development and tooling
    * Learn about caching and how to use it to improve performance
+
+
+Mi autoevaluacion sobre los objetivos es que han sido cumplidos con exito, exceptuando el ultimo puesto que no logre implementar correctamente el sistema de cacheo. Debo entender mejor a nivel teorico su uso.

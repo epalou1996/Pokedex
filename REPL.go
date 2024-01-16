@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -10,22 +12,27 @@ func StartRepl(c *config) {
 
 	// Mensaje inicial del REPL
 	fmt.Println("Hola soy Rotom, talvez me conozcas con otra forma, pero ahora puedo darte mucha informacion del mundo de Pokemon, en que puedo ayudarte?")
+	reader := bufio.NewScanner(os.Stdin)
 	for {
-
 		// Recolectamos la informacion que el usuario ingresa.
-		var mensaje string
 		fmt.Print(" Pokedex > ")
-		fmt.Scanln(&mensaje)
+		reader.Scan()
 
 		// Inicializamos cleanInputs, nos devuelve un array de strings, de los cuales tomaremos el primero dentro de la variable comando
-		words := cleanInputs(mensaje)
+		words := cleanInput(reader.Text())
 		comando := words[0]
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
+		fmt.Println(args)
 
 		// de existir este comando en getCommands, nos devolvera la estructura asociada a este en la variable command, y un true, de lo contrario un nil y false
 		// los continues permiten que el programa siga abierto.
 		command, exists := getCommands()[comando]
+
 		if exists {
-			err := command.callback(c)
+			err := command.callback(c, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -38,9 +45,9 @@ func StartRepl(c *config) {
 }
 
 // Funcion sencilla con modulo strings, que nos sirve para modificar un poco el texto
-func cleanInputs(text string) []string {
-	lowered := strings.ToLower(text)
-	words := strings.Fields(lowered)
+func cleanInput(text string) []string {
+	output := strings.ToLower(text)
+	words := strings.Fields(output)
 	return words
 }
 
@@ -58,7 +65,7 @@ type MapsURLs struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -69,6 +76,7 @@ func getCommands() map[string]cliCommand {
 	commandsMap["exit"] = cliCommand{"exit", "Con este comando cerraras la Pokedex", commandExit}
 	commandsMap["map"] = cliCommand{"map", "Para ver los siguientes 20 lugares que se encuentran en este mundo.", commandMap}
 	commandsMap["mapb"] = cliCommand{"mapb", "Para ver los anteriores 20 lugares que se encuentran en este mundo.", commandMapb}
+	commandsMap["explore"] = cliCommand{"explore", "Veras los pokemon que encuentras en la zona que busques.", commandExplore}
 
 	return commandsMap
 

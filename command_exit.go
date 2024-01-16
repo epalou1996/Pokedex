@@ -6,7 +6,7 @@ import (
 )
 
 // Mata el REPL
-func commandExit(c *config) error {
+func commandExit(c *config, args ...string) error {
 	fmt.Println("Hasta luego!")
 	os.Exit(0)
 	return nil

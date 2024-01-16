@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // LocationResponse estructura para deserializar la respuesta JSON
 type LocationResponse struct {
@@ -18,7 +20,7 @@ type LocationEntry struct {
 
 // Esta sera la funcion que nos ayude a mapear correctamente hacia adelante.
 
-func commandMap(c *config) error {
+func commandMap(c *config, args ...string) error {
 	// Declarar una variable del tipo de estructura esperado
 	var response LocationResponse
 
@@ -44,7 +46,7 @@ func commandMap(c *config) error {
 
 // Esta funcion sera el opuesto a la primera, ira de hacia los 20 anteriores resultados
 
-func commandMapb(c *config) error {
+func commandMapb(c *config, args ...string) error {
 
 	// Primero mirar si hay resultados anteriores, con la variable que pasa la config se podria.
 	if *c.Location.Previous == "" {
